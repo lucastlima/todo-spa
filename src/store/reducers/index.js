@@ -1,8 +1,10 @@
-import { combineReducers } from 'redux';
-import testReducer from './test.reducer';
+import { combineReducers } from "redux";
+import todosReducer from "./todos.reducer";
+import recordingReducer from "./recording.reducer";
 
 const rootReducer = combineReducers({
-  test: testReducer
+  todos: todosReducer,
+  recording: recordingReducer
 });
 
 export default rootReducer;

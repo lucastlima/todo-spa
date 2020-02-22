@@ -1,11 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import App from "./components/App";
-import GlobalStyle from "./utils/global";
-import store from "./store";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import App from './components/App';
+import GlobalStyle from './utils/global';
+import store from './store';
+import whyDidYouUpdate from 'why-did-you-update';
 
-const root = document.getElementById("root");
+whyDidYouUpdate(React);
+
+const root = document.getElementById('root');
 
 ReactDOM.render(
   <Provider store={store}>

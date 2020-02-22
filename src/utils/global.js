@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components/dist/styled-components";
+import { createGlobalStyle } from 'styled-components/dist/styled-components';
 
 export default createGlobalStyle`
 
@@ -41,7 +41,7 @@ export default createGlobalStyle`
   background: linear-gradient(135deg, #093554 0%, #058ed8 50%, #f4ebc9 100%);
 }
 
-h1, h2,h3,h4,h5 {
+h1, h2,h3,h4,h5,p {
   margin: 0.3rem 0;
 }
 

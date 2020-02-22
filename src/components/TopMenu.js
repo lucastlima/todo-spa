@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { addTodo } from "../store/actions";
-import uuid from "uuid/v4";
-
-import Container from "./Container";
-import Button from "./Button";
-import Modal from "./Modal";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
+import StopRoundedIcon from '@material-ui/icons/StopRounded';
+import DeleteSweepRoundedIcon from '@material-ui/icons/DeleteSweepRounded';
+import TodoForm from './TodoForm';
+import Container from './Container';
+import Modal from './Modal';
 
 const SyledTopMenu = styled.div`
   display: flex;
@@ -35,85 +35,37 @@ const StyledAddTodoBtn = styled.span`
   }
 `;
 
-const StyledAddTodo = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-radius: 0.4rem;
-  width: 30rem;
-  max-width: 90vw;
-  height: auto;
-  background-color: var(--white);
-  padding: 1rem;
-  box-shadow: var(--shadow-tree);
-`;
-
 const StyledWrapper = styled.div`
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: space-between;
+  padding: 0 1rem;
 `;
 
-const StyledInput = styled.input`
-  border: none;
-  margin: 0.5rem 0;
-  line-height: 2rem;
-  padding: 0 0.5rem;
-  box-shadow: var(--shadow-one);
-  border-radius: 0.3rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: inherit;
-  &::placeholder {
-    font-size: 1rem;
-    color: #aaa;
+const RecordControl = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  & svg {
+    font-size: 1.6rem;
+    cursor: pointer;
   }
-`;
-
-const StyledTextArea = styled.textarea`
-  font-size: 1rem;
-  height: 5rem;
-  border: none;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
-  box-shadow: var(--shadow-one);
-  border-radius: 0.3rem;
-  resize: none;
-  color: inherit;
-  &::placeholder {
-    font-size: 1rem;
-    color: #aaa;
+  & #rec {
+    font-size: 1.2em;
+  }
+  & #cleanRec {
+    font-size: 1.3em;
+    margin-left: 1rem;
   }
 `;
 
 function TopMenu() {
-  const dispatch = useDispatch();
-  const [todoName, setTodoName] = useState("");
-  const [todoDesc, setTodoDesc] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
-  };
-
-  const handleInput = e => {
-    setTodoName(e.target.value);
-  };
-  const handleTextArea = e => {
-    setTodoDesc(e.target.value);
-  };
-
-  const handleAddTodo = () => {
-    const newTodo = {
-      id: uuid(),
-      name: todoName,
-      description: todoDesc,
-      creationDate: new Date()
-    };
-    dispatch(addTodo(newTodo));
-    setTodoName("");
-    setTodoDesc("");
-    handleModal();
   };
 
   return (
@@ -121,31 +73,17 @@ function TopMenu() {
       <Container>
         <StyledWrapper>
           <h2>TODO SPA</h2>
+          <RecordControl>
+            <FiberManualRecordIcon id="rec" />
+            <PlayArrowRoundedIcon />
+            <StopRoundedIcon />
+            <DeleteSweepRoundedIcon id="cleanRec" />
+          </RecordControl>
           <StyledAddTodoBtn onClick={handleModal}>+</StyledAddTodoBtn>
         </StyledWrapper>
       </Container>
       <Modal close={handleModal} open={isModalOpen}>
-        <StyledAddTodo>
-          <h4>ADD TODO</h4>
-          <StyledInput
-            onChange={handleInput}
-            value={todoName}
-            autoFocus
-            placeholder="Name"
-            type="text"
-          />
-          <StyledTextArea
-            onChange={handleTextArea}
-            value={todoDesc}
-            placeholder="Description..."
-          />
-          <div>
-            <Button color="#f7ab1b" onClick={handleAddTodo}>
-              Add
-            </Button>
-            <Button onClick={handleModal}>Cancel</Button>
-          </div>
-        </StyledAddTodo>
+        <TodoForm isOpen={isModalOpen} handleModal={handleModal} />
       </Modal>
     </SyledTopMenu>
   );

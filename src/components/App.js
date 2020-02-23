@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeTodo, selectTodo } from '../store/actions';
+import { removeTodo, selectTodo, editTodo } from '../store/actions';
+import Button from './Button';
 
 import Todo from './Todo';
 import Modal from './Modal';
@@ -23,7 +24,25 @@ const StyledApp = styled.div`
 function App() {
   const dispatch = useDispatch();
   const todos = useSelector(({ todos }) => todos.allTodos);
+  const selected = useSelector(({ todos }) => todos.selectedTodo);
+  const [todoName, setTodoName] = useState('');
+  const [todoDesc, setTodoDesc] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (selected) {
+      setTodoName(selected.name);
+      setTodoDesc(selected.description);
+    }
+  }, [selected]);
+
+  function handleInput(e) {
+    if (e.target.name === 'name') {
+      setTodoName(e.target.value);
+    } else {
+      setTodoDesc(e.target.value);
+    }
+  }
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -31,8 +50,19 @@ function App() {
   const handleDelete = id => {
     dispatch(removeTodo(id));
   };
-  const handleEditTodo = id => {
+  const handleTodoSelection = id => {
     dispatch(selectTodo(id));
+    handleModal();
+  };
+
+  const handleEditTodo = () => {
+    const newTodo = {
+      ...selected,
+      name: todoName,
+      description: todoDesc,
+      timestamp: new Date().valueOf()
+    };
+    dispatch(editTodo(newTodo));
     handleModal();
   };
 
@@ -43,13 +73,24 @@ function App() {
           <Todo
             key={todo.id}
             {...todo}
-            editTodo={handleEditTodo}
+            editTodo={handleTodoSelection}
             deleteTodo={handleDelete}
           />
         ))}
       </StyledApp>
       <Modal close={handleModal} open={isModalOpen}>
-        <TodoForm type="edit" isOpen={isModalOpen} handleModal={handleModal} />
+        <TodoForm
+          title="EDIT TODO"
+          isOpen={isModalOpen}
+          setModal={handleModal}
+          controlInput={handleInput}
+          name={todoName}
+          desc={todoDesc}
+        >
+          <Button color="#f7ab1b" onClick={handleEditTodo}>
+            EDIT
+          </Button>
+        </TodoForm>
       </Modal>
     </Layout>
   );

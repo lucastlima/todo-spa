@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
-import StopRoundedIcon from '@material-ui/icons/StopRounded';
-import DeleteSweepRoundedIcon from '@material-ui/icons/DeleteSweepRounded';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addTodo,
+  startRecording,
+  stopRecording,
+  deleteRecordingSession,
+  playRecordingSession
+} from '../store/actions';
+import uuid from 'uuid/v4';
+import RecBtn from '@material-ui/icons/FiberManualRecord';
+import PlayBtn from '@material-ui/icons/PlayArrowRounded';
+import StopBtn from '@material-ui/icons/StopRounded';
+import DeleteBtn from '@material-ui/icons/DeleteSweepRounded';
 import TodoForm from './TodoForm';
 import Container from './Container';
 import Modal from './Modal';
+import Button from './Button';
 
 const SyledTopMenu = styled.div`
   display: flex;
@@ -52,20 +62,76 @@ const RecordControl = styled.div`
     font-size: 1.6rem;
     cursor: pointer;
   }
-  & #rec {
-    font-size: 1.2em;
-  }
-  & #cleanRec {
+
+  & #deleteRec {
     font-size: 1.3em;
     margin-left: 1rem;
+  }
+  & #play {
+    color: ${({ isPlaying }) => (isPlaying ? 'green' : null)};
+  }
+  & #stop {
+  }
+  & #rec {
+    color: ${({ isRecording }) => (isRecording ? 'red' : null)};
+    font-size: 1.2em;
   }
 `;
 
 function TopMenu() {
+  const dispatch = useDispatch();
+  const isRecording = useSelector(({ recording }) => recording.isRecording);
+  const isPlaying = useSelector(({ recording }) => recording.isPlaying);
+  const [todoName, setTodoName] = useState('');
+  const [todoDesc, setTodoDesc] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      setTodoName('');
+      setTodoDesc('');
+    }
+  }, [isModalOpen]);
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
+  };
+
+  function handleInput(e) {
+    if (e.target.name === 'name') {
+      setTodoName(e.target.value);
+    } else {
+      setTodoDesc(e.target.value);
+    }
+  }
+
+  const handleAddTodo = () => {
+    const date = new Date();
+    const newTodo = {
+      id: uuid(),
+      name: todoName,
+      description: todoDesc,
+      creationDate: date,
+      timestamp: date.valueOf()
+    };
+    dispatch(addTodo(newTodo));
+    handleModal();
+  };
+
+  const handleStartRecording = () => {
+    dispatch(startRecording());
+  };
+  const handleStopRecording = () => {
+    dispatch(stopRecording());
+  };
+
+  const handleDeleteSession = () => {
+    dispatch(deleteRecordingSession());
+  };
+
+  const handlePlaySession = async () => {
+    await dispatch(playRecordingSession());
+    console.log('Test Finished');
   };
 
   return (
@@ -73,17 +139,28 @@ function TopMenu() {
       <Container>
         <StyledWrapper>
           <h2>TODO SPA</h2>
-          <RecordControl>
-            <FiberManualRecordIcon id="rec" />
-            <PlayArrowRoundedIcon />
-            <StopRoundedIcon />
-            <DeleteSweepRoundedIcon id="cleanRec" />
+          <RecordControl isRecording={isRecording} isPlaying={isPlaying}>
+            <RecBtn id="rec" onClick={handleStartRecording} />
+            <StopBtn id="stop" onClick={handleStopRecording} />
+            <PlayBtn id="play" onClick={handlePlaySession} />
+            <DeleteBtn id="deleteRec" onClick={handleDeleteSession} />
           </RecordControl>
           <StyledAddTodoBtn onClick={handleModal}>+</StyledAddTodoBtn>
         </StyledWrapper>
       </Container>
       <Modal close={handleModal} open={isModalOpen}>
-        <TodoForm isOpen={isModalOpen} handleModal={handleModal} />
+        <TodoForm
+          title="ADD TODO"
+          isOpen={isModalOpen}
+          setModal={handleModal}
+          controlInput={handleInput}
+          name={todoName}
+          desc={todoDesc}
+        >
+          <Button color="#f7ab1b" onClick={handleAddTodo}>
+            ADD
+          </Button>
+        </TodoForm>
       </Modal>
     </SyledTopMenu>
   );

@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { addTodo } from '../store/actions';
-import uuid from 'uuid/v4';
 import Button from './Button';
 
 const StyledInput = styled.input`
@@ -38,7 +35,7 @@ const StyledTextArea = styled.textarea`
   }
 `;
 
-const StyledAddTodo = styled.div`
+const StyledTodoForm = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 0.4rem;
@@ -50,70 +47,29 @@ const StyledAddTodo = styled.div`
   box-shadow: var(--shadow-tree);
 `;
 
-function TodoForm({ handleModal, isOpen, type }) {
-  const dispatch = useDispatch();
-  const selected = useSelector(({ todos }) => todos.selectedTodo);
-
-  const [todoName, setTodoName] = useState('');
-  const [todoDesc, setTodoDesc] = useState('');
-
-  useEffect(() => {
-    if (!isOpen) {
-      cleanFormFields();
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (selected && type === 'edit') {
-      setTodoName(selected.name);
-      setTodoDesc(selected.description);
-    }
-  }, [selected]);
-
-  const handleInput = e => {
-    setTodoName(e.target.value);
-  };
-  const handleTextArea = e => {
-    setTodoDesc(e.target.value);
-  };
-
-  const cleanFormFields = () => {
-    setTodoName('');
-    setTodoDesc('');
-  };
-
-  const handleAddTodo = () => {
-    const newTodo = {
-      id: uuid(),
-      name: todoName,
-      description: todoDesc,
-      creationDate: new Date()
-    };
-    dispatch(addTodo(newTodo));
-    handleModal();
-  };
+function TodoForm({ controlInput, setModal, name, desc, title, children }) {
   return (
-    <StyledAddTodo>
-      <h4>ADD TODO</h4>
+    <StyledTodoForm>
+      <h4>{title}</h4>
       <StyledInput
-        onChange={handleInput}
-        value={todoName}
-        autoFocus
-        placeholder="Name"
+        autoComplete="off"
+        onChange={controlInput}
+        value={name}
         type="text"
+        name="name"
+        placeholder="Name"
       />
       <StyledTextArea
-        onChange={handleTextArea}
-        value={todoDesc}
+        onChange={controlInput}
+        name="description"
+        value={desc}
         placeholder="Description..."
       />
       <div>
-        <Button color="#f7ab1b" onClick={handleAddTodo}>
-          {type === 'edit' ? 'Update' : 'Add'}
-        </Button>
-        <Button onClick={handleModal}>Cancel</Button>
+        {children}
+        <Button onClick={setModal}>Cancel</Button>
       </div>
-    </StyledAddTodo>
+    </StyledTodoForm>
   );
 }
 

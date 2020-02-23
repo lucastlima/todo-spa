@@ -18,17 +18,15 @@ export const selectTodo = id => (dispatch, getState) => {
 
 export const removeTodo = id => (dispatch, getState) => {
   const todos = getState().todos.allTodos;
-  console.log(todos);
-
   const newTodos = todos.filter(todo => todo.id !== id);
-  dispatch({ type: REMOVE_TODO, payload: newTodos });
+  dispatch({
+    type: REMOVE_TODO,
+    payload: { todos: newTodos, id, timestamp: new Date().valueOf() }
+  });
   localStorage.setItem('todo-spa', JSON.stringify(getState()));
 };
 
-export const editTodo = id => (dispatch, getState) => {
-  const todos = getState().todos.allTodos;
-  const todo = todos.find(todo => todo.id === id);
-
+export const editTodo = todo => (dispatch, getState) => {
   dispatch({ type: UPDATE_TODO, payload: todo });
   localStorage.setItem('todo-spa', JSON.stringify(getState()));
 };

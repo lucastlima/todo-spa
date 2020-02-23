@@ -23,8 +23,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: 'public/index.html',
-      filename: 'index.html'
+      template: path.resolve(__dirname, 'public/index.html'),
+      filename: path.resolve(__dirname, 'index.html')
     })
   ]
 };

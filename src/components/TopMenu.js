@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect, memo } from "react";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addTodo,
   startRecording,
   stopRecording,
   deleteRecordingSession,
   playRecordingSession
-} from '../store/actions';
-import uuid from 'uuid/v4';
-import RecBtn from '@material-ui/icons/FiberManualRecord';
-import PlayBtn from '@material-ui/icons/PlayArrowRounded';
-import StopBtn from '@material-ui/icons/StopRounded';
-import DeleteBtn from '@material-ui/icons/DeleteSweepRounded';
-import TodoForm from './TodoForm';
-import Container from './Container';
-import Modal from './Modal';
-import Button from './Button';
+} from "../store/actions";
+import uuid from "uuid/v4";
+import RecBtn from "@material-ui/icons/FiberManualRecord";
+import PlayBtn from "@material-ui/icons/PlayArrowRounded";
+import StopBtn from "@material-ui/icons/StopRounded";
+import DeleteBtn from "@material-ui/icons/DeleteSweepRounded";
+import TodoForm from "./TodoForm";
+import Container from "./Container";
+import Modal from "./Modal";
+import Button from "./Button";
 
 const SyledTopMenu = styled.div`
   display: flex;
@@ -59,37 +59,61 @@ const RecordControl = styled.div`
   align-items: center;
 
   & svg {
-    font-size: 1.6rem;
     cursor: pointer;
+    height: 100%;
+    width: 100%;
+  }
+
+  & #deleteRec,
+  #play,
+  #stop,
+  #rec {
+    width: 1.8rem;
+    height: 1.5rem;
   }
 
   & #deleteRec {
-    font-size: 1.3em;
     margin-left: 1rem;
+    padding: 1.4px;
   }
   & #play {
-    color: ${({ isPlaying }) => (isPlaying ? 'green' : null)};
-  }
-  & #stop {
+    color: ${({ isPlaying }) => (isPlaying ? "green" : null)};
   }
   & #rec {
-    color: ${({ isRecording }) => (isRecording ? 'red' : null)};
-    font-size: 1.2em;
+    color: ${({ isRecording }) => (isRecording ? "red" : null)};
+    padding: 1.5px;
+  }
+  [data-label] {
+    position: relative;
+    & ::after {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      content: attr(data-label);
+      font-size: 0.6rem;
+      color: var(--dark-blue);
+      bottom: -0.8rem;
+      transform: translateX(-50%);
+      left: 50%;
+      width: min-content;
+      height: 1rem;
+    }
   }
 `;
 
-function TopMenu() {
+function WrappedTopMenu() {
   const dispatch = useDispatch();
   const isRecording = useSelector(({ recording }) => recording.isRecording);
   const isPlaying = useSelector(({ recording }) => recording.isPlaying);
-  const [todoName, setTodoName] = useState('');
-  const [todoDesc, setTodoDesc] = useState('');
+  const [todoName, setTodoName] = useState("");
+  const [todoDesc, setTodoDesc] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!isModalOpen) {
-      setTodoName('');
-      setTodoDesc('');
+      setTodoName("");
+      setTodoDesc("");
     }
   }, [isModalOpen]);
 
@@ -98,7 +122,7 @@ function TopMenu() {
   };
 
   function handleInput(e) {
-    if (e.target.name === 'name') {
+    if (e.target.name === "name") {
       setTodoName(e.target.value);
     } else {
       setTodoDesc(e.target.value);
@@ -131,7 +155,7 @@ function TopMenu() {
 
   const handlePlaySession = async () => {
     await dispatch(playRecordingSession());
-    console.log('Test Finished');
+    console.log("Test Finished");
   };
 
   return (
@@ -140,10 +164,18 @@ function TopMenu() {
         <StyledWrapper>
           <h2>TODO SPA</h2>
           <RecordControl isRecording={isRecording} isPlaying={isPlaying}>
-            <RecBtn id="rec" onClick={handleStartRecording} />
-            <StopBtn id="stop" onClick={handleStopRecording} />
-            <PlayBtn id="play" onClick={handlePlaySession} />
-            <DeleteBtn id="deleteRec" onClick={handleDeleteSession} />
+            <div id="rec" data-label="Rec">
+              <RecBtn onClick={handleStartRecording} />
+            </div>
+            <div id="stop" data-label="Stop">
+              <StopBtn onClick={handleStopRecording} />
+            </div>
+            <div id="play" data-label="Play">
+              <PlayBtn onClick={handlePlaySession} />
+            </div>
+            <div id="deleteRec" data-label="Delete">
+              <DeleteBtn onClick={handleDeleteSession} />
+            </div>
           </RecordControl>
           <StyledAddTodoBtn onClick={handleModal}>+</StyledAddTodoBtn>
         </StyledWrapper>
@@ -156,6 +188,7 @@ function TopMenu() {
           controlInput={handleInput}
           name={todoName}
           desc={todoDesc}
+          isOpen={isModalOpen}
         >
           <Button color="#f7ab1b" onClick={handleAddTodo}>
             ADD
@@ -165,5 +198,7 @@ function TopMenu() {
     </SyledTopMenu>
   );
 }
+
+const TopMenu = memo(WrappedTopMenu);
 
 export default TopMenu;

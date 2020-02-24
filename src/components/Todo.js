@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import Delete from '@material-ui/icons/CancelRounded';
-import Create from '@material-ui/icons/Create';
+import React from "react";
+import styled from "styled-components";
+import Delete from "@material-ui/icons/CancelRounded";
+import Create from "@material-ui/icons/Create";
 
 const StyledTodo = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ const StyledTodo = styled.div`
   padding: 1rem;
   overflow: hidden;
   border-radius: 0.3rem;
-  transition: all 0.3s ease-in;
+  animation: todoIn 0.2s ease-in;
 
   &:hover {
     max-height: 100%;
@@ -46,6 +46,7 @@ const StyledTodo = styled.div`
     cursor: pointer;
     transition: color 0.1s ease-in;
     will-change: color;
+
     &:hover {
       color: var(--dark-blue);
     }

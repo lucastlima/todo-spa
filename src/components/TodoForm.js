@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import Button from './Button';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import Button from "./Button";
 
 const StyledInput = styled.input`
   border: none;
@@ -47,11 +47,26 @@ const StyledTodoForm = styled.div`
   box-shadow: var(--shadow-tree);
 `;
 
-function TodoForm({ controlInput, setModal, name, desc, title, children }) {
+function TodoForm({
+  controlInput,
+  setModal,
+  name,
+  desc,
+  title,
+  children,
+  isOpen
+}) {
+  const inputName = React.createRef();
+
+  useEffect(() => {
+    inputName.current.focus();
+  }, [isOpen]);
+
   return (
     <StyledTodoForm>
       <h4>{title}</h4>
       <StyledInput
+        ref={inputName}
         autoComplete="off"
         onChange={controlInput}
         value={name}

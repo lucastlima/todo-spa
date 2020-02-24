@@ -5,7 +5,7 @@ import {
   UPDATE_TODO,
   START_SESSION_REPLAY,
   RESET_APP_STATE
-} from '../actiontypes';
+} from "../actiontypes";
 
 const initialState = {
   allTodos: [],
@@ -35,7 +35,7 @@ export default (state = initialState, action) => {
             description: action.payload.description
           };
         } else {
-          return todo;
+          return Object.assign({}, todo);
         }
       });
       return { ...state, allTodos: newData };

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { removeTodo, selectTodo, editTodo } from '../store/actions';
-import Button from './Button';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { removeTodo, selectTodo, editTodo } from "../store/actions";
+import Button from "./Button";
 
-import Todo from './Todo';
-import Modal from './Modal';
-import TodoForm from './TodoForm';
-import Layout from './Layout';
+import Todo from "./Todo";
+import Modal from "./Modal";
+import TodoForm from "./TodoForm";
+import Layout from "./Layout";
 
 const StyledApp = styled.div`
   display: flex;
@@ -25,8 +25,8 @@ function App() {
   const dispatch = useDispatch();
   const todos = useSelector(({ todos }) => todos.allTodos);
   const selected = useSelector(({ todos }) => todos.selectedTodo);
-  const [todoName, setTodoName] = useState('');
-  const [todoDesc, setTodoDesc] = useState('');
+  const [todoName, setTodoName] = useState("");
+  const [todoDesc, setTodoDesc] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function App() {
   }, [selected]);
 
   function handleInput(e) {
-    if (e.target.name === 'name') {
+    if (e.target.name === "name") {
       setTodoName(e.target.value);
     } else {
       setTodoDesc(e.target.value);
@@ -86,6 +86,7 @@ function App() {
           controlInput={handleInput}
           name={todoName}
           desc={todoDesc}
+          isOpen={isModalOpen}
         >
           <Button color="#f7ab1b" onClick={handleEditTodo}>
             EDIT

@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components/dist/styled-components';
+import { createGlobalStyle } from "styled-components/dist/styled-components";
 
 export default createGlobalStyle`
 
@@ -58,6 +58,20 @@ h1, h2,h3,h4,h5,p {
       opacity: 1;
     }
   }
+
+  @keyframes todoIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px)
+    }
+    60% {
+      transform: translateX(0)
+    }
+    100% {
+      opacity: 1;      
+    }
+  }
+
 
   input:focus, textarea:focus {
     outline: none !important;

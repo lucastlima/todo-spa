@@ -6,7 +6,9 @@ import GlobalStyle from './utils/global';
 import store from './store';
 import whyDidYouUpdate from 'why-did-you-update';
 
-whyDidYouUpdate(React);
+if (process.env.NODE_ENV === 'development') {
+  whyDidYouUpdate(React);
+}
 
 const root = document.getElementById('root');
 

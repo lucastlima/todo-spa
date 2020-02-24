@@ -10,6 +10,7 @@
   "main": "./src/index.js",
   "scripts": {
     "start": "node server.js",
+    "test": "jest -c jest.config.js --watch",
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development --progress --profile --colors",
     "dev": "webpack-dev-server --open --hot --mode development"
@@ -35,6 +36,8 @@
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-react": "^7.8.3",
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^9.4.1",
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^5.1.1",
     "html-loader": "^0.5.5",
@@ -42,6 +45,7 @@
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
+    "jest": "^25.1.0",
     "why-did-you-update": "^1.0.8"
   }
 }

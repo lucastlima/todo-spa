@@ -33,10 +33,10 @@ const modalTarget = document.getElementById("modal");
 
 const Modal = ({ children, open, close }) => {
   return ReactDOM.createPortal(
-    <>
+    <React.Fragment>
       <StyledModal open={open}>{children}</StyledModal>
       <StyledBackdrop onClick={close} open={open} />
-    </>,
+    </React.Fragment>,
     modalTarget
   );
 };

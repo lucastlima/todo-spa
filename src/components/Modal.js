@@ -1,9 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import styled from "styled-components";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import styled from 'styled-components';
 
 const StyledModal = styled.div`
-  display: ${({ open }) => (open ? "flex" : "none")};
+  display: ${({ open }) => (open ? 'flex' : 'none')};
   position: fixed;
   top: 50%;
   left: 50%;
@@ -15,7 +15,7 @@ const StyledModal = styled.div`
   will-change: opacity;
 `;
 const StyledBackdrop = styled.div`
-  display: ${({ open }) => (open ? "flex" : "none")};
+  display: ${({ open }) => (open ? 'flex' : 'none')};
   position: fixed;
   z-index: 10;
   top: 0;
@@ -29,15 +29,17 @@ const StyledBackdrop = styled.div`
   will-change: opacity;
 `;
 
-const modalTarget = document.getElementById("modal");
+const modalRoot = document.createElement('div');
+modalRoot.setAttribute('id', 'modal-root');
+document.body.appendChild(modalRoot);
 
 const Modal = ({ children, open, close }) => {
   return ReactDOM.createPortal(
     <React.Fragment>
       <StyledModal open={open}>{children}</StyledModal>
-      <StyledBackdrop onClick={close} open={open} />
+      <StyledBackdrop data-testid="backdrop" onClick={close} open={open} />
     </React.Fragment>,
-    modalTarget
+    modalRoot
   );
 };
 

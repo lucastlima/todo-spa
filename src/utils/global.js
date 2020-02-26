@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 export default createGlobalStyle`
 
@@ -9,6 +9,7 @@ export default createGlobalStyle`
     --dark-blue: #093554;
     --blue: #058ed8;
     --light-blue: #058ed8;
+    --error: #cc0000;
     /* shadows */
     --shadow-one: 0 1px 3px rgba(9, 53, 84, 0.12), 0 1px 2px rgba(9, 53, 84, 0.24);
     --shadow-two: 0 3px 6px rgba(9, 53, 84, 0.16), 0 3px 6px rgba(9, 53, 84, 0.23);

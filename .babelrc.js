@@ -1,30 +1,29 @@
-const env = process.env.NODE_ENV;
 module.exports = {
   presets: [
     [
-      '@babel/preset-env',
+      "@babel/preset-env",
       {
         targets: {
-          node: '10'
+          node: "10"
         }
       }
     ],
-    '@babel/preset-react'
+    "@babel/preset-react"
   ],
-  plugins:
-    env === 'production'
-      ? [
-          'babel-plugin-styled-components',
-          '@babel/plugin-proposal-object-rest-spread',
-          [
-            'babel-plugin-remove-attribute',
-            {
-              attribute: 'data-testid'
-            }
-          ]
+  env: {
+    production: {
+      plugins: [
+        [
+          "babel-plugin-remove-attribute",
+          {
+            attribute: "data-testid"
+          }
         ]
-      : [
-          'babel-plugin-styled-components',
-          '@babel/plugin-proposal-object-rest-spread'
-        ]
+      ]
+    }
+  },
+  plugins: [
+    "babel-plugin-styled-components",
+    "@babel/plugin-proposal-object-rest-spread"
+  ]
 };

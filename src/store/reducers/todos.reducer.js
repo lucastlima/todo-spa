@@ -10,7 +10,6 @@ import {
 const initialState = {
   allTodos: [],
   selectedTodo: null,
-  prevState: null,
   dialogBox: null
 };
 
@@ -38,7 +37,6 @@ export default (state = initialState, action) => {
     case RESET_APP_STATE:
       return {
         ...state,
-        prevState: [...state.allTodos],
         allTodos: []
       };
     case SET_DIALOGBOX:

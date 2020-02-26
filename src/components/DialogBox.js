@@ -28,4 +28,9 @@ function DialogBox({ children, close, title, message }) {
   );
 }
 
+DialogBox.defaultProps = {
+  title: "Message:",
+  message: ""
+};
+
 export default DialogBox;

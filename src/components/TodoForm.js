@@ -47,7 +47,7 @@ const StyledTodoForm = styled.div`
   box-shadow: var(--shadow-tree);
 
   & #error {
-    color: red;
+    color: var(--error);
     font-size: 0.7rem;
     animation: todoIn 0.2s ease-in;
   }

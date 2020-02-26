@@ -1,22 +1,22 @@
-import React, { useState, useEffect, memo } from "react";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect, memo } from 'react';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   addTodo,
   startRecording,
   stopRecording,
   deleteRecordingSession,
   playRecordingSession
-} from "../store/actions";
-import uuid from "uuid/v4";
-import RecBtn from "@material-ui/icons/FiberManualRecord";
-import PlayBtn from "@material-ui/icons/PlayArrowRounded";
-import StopBtn from "@material-ui/icons/StopRounded";
-import DeleteBtn from "@material-ui/icons/DeleteSweepRounded";
-import TodoForm from "./TodoForm";
-import Container from "./Container";
-import Modal from "./Modal";
-import Button from "./Button";
+} from '../store/actions';
+import uuid from 'uuid/v4';
+import RecBtn from '@material-ui/icons/FiberManualRecord';
+import PlayBtn from '@material-ui/icons/PlayArrowRounded';
+import StopBtn from '@material-ui/icons/StopRounded';
+import DeleteBtn from '@material-ui/icons/DeleteSweepRounded';
+import TodoForm from './TodoForm';
+import Container from './Container';
+import Modal from './Modal';
+import Button from './Button';
 
 const SyledTopMenu = styled.div`
   display: flex;
@@ -77,10 +77,10 @@ const RecordControl = styled.div`
     padding: 1.4px;
   }
   & #play {
-    color: ${({ isPlaying }) => (isPlaying ? "green" : null)};
+    color: ${({ isPlaying }) => (isPlaying ? 'green' : null)};
   }
   & #rec {
-    color: ${({ isRecording }) => (isRecording ? "red" : null)};
+    color: ${({ isRecording }) => (isRecording ? 'red' : null)};
     padding: 1.5px;
   }
   [data-label] {
@@ -106,15 +106,15 @@ function WrappedTopMenu() {
   const dispatch = useDispatch();
   const isRecording = useSelector(({ recording }) => recording.isRecording);
   const isPlaying = useSelector(({ recording }) => recording.isPlaying);
-  const [todoName, setTodoName] = useState("");
-  const [todoDesc, setTodoDesc] = useState("");
+  const [todoName, setTodoName] = useState('');
+  const [todoDesc, setTodoDesc] = useState('');
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!isModalOpen) {
-      setTodoName("");
-      setTodoDesc("");
+      setTodoName('');
+      setTodoDesc('');
     }
   }, [isModalOpen]);
 
@@ -123,7 +123,7 @@ function WrappedTopMenu() {
   };
 
   function handleInput(e) {
-    if (e.target.name === "name") {
+    if (e.target.name === 'name') {
       setTodoName(e.target.value);
     } else {
       setTodoDesc(e.target.value);
@@ -132,7 +132,7 @@ function WrappedTopMenu() {
 
   const handleAddTodo = () => {
     if (!todoName) {
-      setError("Name is required.");
+      setError('Name is required.');
       setTimeout(() => {
         setError(null);
       }, 1500);
@@ -161,7 +161,7 @@ function WrappedTopMenu() {
   };
 
   const handlePlaySession = () => {
-    dispatch(playRecordingSession());
+    if (!isPlaying) dispatch(playRecordingSession());
   };
 
   return (

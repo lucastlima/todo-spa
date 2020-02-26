@@ -168,7 +168,7 @@ function WrappedTopMenu() {
     <SyledTopMenu>
       <Container>
         <StyledWrapper>
-          <h2>TODO SPA</h2>
+          <h2>TODOs</h2>
           <RecordControl isRecording={isRecording} isPlaying={isPlaying}>
             <div id="rec" data-label="Rec">
               <RecBtn onClick={handleStartRecording} />

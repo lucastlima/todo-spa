@@ -2,13 +2,13 @@
 
 TODO SPA
 
-# Server
+## Server
 npm start - Express Server. (Heroku)
-# Development Mode
+## Development Mode
 npm run dev - Run development mode.
-# Production Build
+## Production Build
 npm run build - Production Build.
-# Development Build
+## Development Build
 npm run build:dev - Development Build.
-# Tests
+## Tests
 npm test - Run tests.

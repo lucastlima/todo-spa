@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import Button from "./Button";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import Button from './Button';
 
 const StyledInput = styled.input`
   border: none;
@@ -45,6 +45,12 @@ const StyledTodoForm = styled.div`
   background-color: var(--white);
   padding: 1rem;
   box-shadow: var(--shadow-tree);
+
+  & #error {
+    color: red;
+    font-size: 0.7rem;
+    animation: todoIn 0.2s ease-in;
+  }
 `;
 
 function TodoForm({
@@ -54,7 +60,8 @@ function TodoForm({
   desc,
   title,
   children,
-  isOpen
+  isOpen,
+  error
 }) {
   const inputName = React.createRef();
 
@@ -67,6 +74,7 @@ function TodoForm({
       <h4>{title}</h4>
       <StyledInput
         ref={inputName}
+        data-testid="name-input"
         autoComplete="off"
         onChange={controlInput}
         value={name}
@@ -74,6 +82,7 @@ function TodoForm({
         name="name"
         placeholder="Name"
       />
+      {error ? <span id="error">{error}</span> : null}
       <StyledTextArea
         onChange={controlInput}
         name="description"

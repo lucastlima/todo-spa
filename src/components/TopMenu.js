@@ -108,6 +108,7 @@ function WrappedTopMenu() {
   const isPlaying = useSelector(({ recording }) => recording.isPlaying);
   const [todoName, setTodoName] = useState('');
   const [todoDesc, setTodoDesc] = useState('');
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -130,13 +131,19 @@ function WrappedTopMenu() {
   }
 
   const handleAddTodo = () => {
+    if (!todoName) {
+      setError('Name is required.');
+      setTimeout(() => {
+        setError(null);
+      }, 1500);
+      return;
+    }
     const date = new Date();
     const newTodo = {
       id: uuid(),
       name: todoName,
       description: todoDesc,
-      creationDate: date,
-      timestamp: date.valueOf()
+      creationDate: date
     };
     dispatch(addTodo(newTodo));
     handleModal();
@@ -180,21 +187,24 @@ function WrappedTopMenu() {
           <StyledAddTodoBtn onClick={handleModal}>+</StyledAddTodoBtn>
         </StyledWrapper>
       </Container>
-      <Modal close={handleModal} open={isModalOpen}>
-        <TodoForm
-          title="ADD TODO"
-          isOpen={isModalOpen}
-          setModal={handleModal}
-          controlInput={handleInput}
-          name={todoName}
-          desc={todoDesc}
-          isOpen={isModalOpen}
-        >
-          <Button color="#f7ab1b" onClick={handleAddTodo}>
-            ADD
-          </Button>
-        </TodoForm>
-      </Modal>
+      {isModalOpen ? (
+        <Modal close={handleModal} open={isModalOpen}>
+          <TodoForm
+            title="ADD TODO"
+            error={error}
+            isOpen={isModalOpen}
+            setModal={handleModal}
+            controlInput={handleInput}
+            name={todoName}
+            desc={todoDesc}
+            isOpen={isModalOpen}
+          >
+            <Button colorProp="#f7ab1b" onClick={handleAddTodo}>
+              ADD
+            </Button>
+          </TodoForm>
+        </Modal>
+      ) : null}
     </SyledTopMenu>
   );
 }

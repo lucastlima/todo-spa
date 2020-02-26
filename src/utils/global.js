@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
 
@@ -76,5 +76,9 @@ h1, h2,h3,h4,h5,p {
   input:focus, textarea:focus {
     outline: none !important;
     box-shadow: 0 0 0.2rem 0.1rem rgba(5, 142, 216, 0.8);
+  }
+
+  .highlight {
+    box-shadow: 0 0 2px 3px #f7ab1b !important;
   }
 `;

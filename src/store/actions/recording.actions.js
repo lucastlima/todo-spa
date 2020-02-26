@@ -25,14 +25,34 @@ export const deleteRecordingSession = () => (dispatch, getState) => {
 export const playRecordingSession = () => async (dispatch, getState) => {
   dispatch({ type: START_SESSION_REPLAY });
   const session = getState().recording.session;
+  const allTodos = getState().todos.allTodos;
   let counter = 0;
   const runTimeLine = () =>
     new Promise((res, rej) => {
       try {
+        let timeline;
         if (session.length) {
           dispatch({ type: RESET_APP_STATE });
-          const timeline = setInterval(() => {
+
+          const highlightFunc = id => {
+            const todo = document.getElementById(`${id}`);
+            todo.classList.add('highlight');
+            setTimeout(() => {
+              todo.classList.remove('highlight');
+            }, 1000);
+          };
+
+          timeline = setInterval(() => {
             if (counter < session.length) {
+              if (session[counter].type === 'UPDATE_TODO') {
+                try {
+                  const id = session[counter].payload.id;
+                  highlightFunc(id);
+                } catch (error) {
+                  clearInterval(timeline);
+                }
+              }
+
               dispatch(session[counter]);
               counter++;
             } else {
@@ -41,12 +61,13 @@ export const playRecordingSession = () => async (dispatch, getState) => {
             }
           }, 1000);
         } else {
-          alert('No records found!');
+          alert('No records found! Please record a session first.');
           res();
         }
       } catch (error) {
         rej();
         console.log(error);
+        clearInterval(timeline);
       }
     });
   await runTimeLine();

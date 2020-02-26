@@ -5,18 +5,13 @@ import {
   UPDATE_TODO,
   START_SESSION_REPLAY,
   RESET_APP_STATE
-} from "../actiontypes";
+} from '../actiontypes';
 
 const initialState = {
   allTodos: [],
   selectedTodo: null,
   prevState: null
 };
-
-// ID:
-// Name:
-// Description:
-// CreationDate:
 
 export default (state = initialState, action) => {
   switch (action.type) {

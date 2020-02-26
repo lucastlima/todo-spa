@@ -1,13 +1,14 @@
-import React from "react";
-import styled from "styled-components";
-import Delete from "@material-ui/icons/CancelRounded";
-import Create from "@material-ui/icons/Create";
+import React from 'react';
+import styled from 'styled-components';
+import Delete from '@material-ui/icons/CancelRounded';
+import Edit from '@material-ui/icons/Create';
+import { handleDate } from '../utils/utils';
 
 const StyledTodo = styled.div`
   display: flex;
   flex-direction: column;
   height: min-content;
-  min-height: 6rem;
+  min-height: 7rem;
   max-height: 8rem;
   width: 100%;
   background-color: var(--white);
@@ -39,8 +40,8 @@ const StyledTodo = styled.div`
     justify-content: space-between;
   }
 
-  #create,
-  #delete {
+  .edit-todo,
+  .delete-todo {
     font-size: 1.2rem;
     color: #a7b1b8;
     cursor: pointer;
@@ -51,19 +52,38 @@ const StyledTodo = styled.div`
       color: var(--dark-blue);
     }
   }
+
+  .todo-desc {
+    display: flex;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .todo-date {
+    font-size: 0.7rem;
+    text-align: right;
+    padding-top: 0.5rem;
+  }
 `;
 
-function Todo({ id, name, description, editTodo, deleteTodo }) {
+function Todo({ id, name, description, editTodo, deleteTodo, creationDate }) {
+  const { month, day, hour, min, sec } = handleDate(creationDate);
   return (
-    <StyledTodo>
+    <StyledTodo id={id}>
       <div className="header">
         <h4>{name}</h4>
         <span>
-          <Create id="create" onClick={() => editTodo(id)} />
-          <Delete id="delete" onClick={() => deleteTodo(id)} />
+          <Edit className="edit-todo" onClick={() => editTodo(id)} />
+          <Delete className="delete-todo" onClick={() => deleteTodo(id)} />
         </span>
       </div>
-      <p>{description}</p>
+      <div className="todo-desc">
+        <p>{description}</p>
+      </div>
+      <span className="todo-date">{`${month}, ${day} at ${hour}:${min}:${sec}`}</span>
     </StyledTodo>
   );
 }

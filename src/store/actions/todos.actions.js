@@ -21,7 +21,7 @@ export const removeTodo = id => (dispatch, getState) => {
   const newTodos = todos.filter(todo => todo.id !== id);
   dispatch({
     type: REMOVE_TODO,
-    payload: { todos: newTodos, id, timestamp: new Date().valueOf() }
+    payload: { todos: newTodos, id }
   });
   localStorage.setItem('todo-spa', JSON.stringify(getState()));
 };

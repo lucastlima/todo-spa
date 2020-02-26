@@ -26,7 +26,7 @@ export default (state = initialState, { type, payload }) => {
     case END_SESSION_REPLAY:
       return { ...state, isPlaying: false };
     case DELETE_RECORDED_SESSION:
-      return { ...state, session: [] };
+      return { ...state, session: [], isRecording: false };
     case ADD_TODO:
       return state.isRecording
         ? {

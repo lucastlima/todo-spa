@@ -2,10 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledButton = styled.button`
-  background-color: ${({ color }) => color};
+  background-color: ${({ colorProp }) => colorProp};
   padding: 0.5rem 1rem;
   border: none;
-  background-color: ${({ color }) => (color ? color : 'var(--blue)')};
+  background-color: ${({ colorProp }) =>
+    colorProp ? colorProp : 'var(--blue)'};
   margin: 0.5rem;
   border-radius: 0.3rem;
   color: var(--white);
@@ -22,9 +23,9 @@ const StyledButton = styled.button`
   }
 `;
 
-function Button({ children, color, ...rest }) {
+function Button({ children, colorProp, ...rest }) {
   return (
-    <StyledButton color={color} {...rest}>
+    <StyledButton colorProp={colorProp} {...rest}>
       {children}
     </StyledButton>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeTodo, selectTodo, editTodo } from '../store/actions';
@@ -21,12 +21,13 @@ const StyledApp = styled.div`
   overflow-y: auto;
 `;
 
-function App() {
+function WrappedApp() {
   const dispatch = useDispatch();
   const todos = useSelector(({ todos }) => todos.allTodos);
   const selected = useSelector(({ todos }) => todos.selectedTodo);
   const [todoName, setTodoName] = useState('');
   const [todoDesc, setTodoDesc] = useState('');
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -56,12 +57,19 @@ function App() {
   };
 
   const handleEditTodo = () => {
+    if (!todoName) {
+      setError('Name is required.');
+      setTimeout(() => {
+        setError(null);
+      }, 1500);
+      return;
+    }
     const newTodo = {
       ...selected,
       name: todoName,
-      description: todoDesc,
-      timestamp: new Date().valueOf()
+      description: todoDesc
     };
+
     dispatch(editTodo(newTodo));
     handleModal();
   };
@@ -78,23 +86,28 @@ function App() {
           />
         ))}
       </StyledApp>
-      <Modal close={handleModal} open={isModalOpen}>
-        <TodoForm
-          title="EDIT TODO"
-          isOpen={isModalOpen}
-          setModal={handleModal}
-          controlInput={handleInput}
-          name={todoName}
-          desc={todoDesc}
-          isOpen={isModalOpen}
-        >
-          <Button color="#f7ab1b" onClick={handleEditTodo}>
-            EDIT
-          </Button>
-        </TodoForm>
-      </Modal>
+      {isModalOpen ? (
+        <Modal close={handleModal} open={isModalOpen}>
+          <TodoForm
+            title="EDIT TODO"
+            error={error}
+            isOpen={isModalOpen}
+            setModal={handleModal}
+            controlInput={handleInput}
+            name={todoName}
+            desc={todoDesc}
+            isOpen={isModalOpen}
+          >
+            <Button colorProp="#f7ab1b" onClick={handleEditTodo}>
+              EDIT
+            </Button>
+          </TodoForm>
+        </Modal>
+      ) : null}
     </Layout>
   );
 }
+
+const App = memo(WrappedApp);
 
 export default App;

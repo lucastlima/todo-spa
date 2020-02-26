@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import Button from './Button';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import Button from "./Button";
 
 const StyledInput = styled.input`
   border: none;
@@ -96,5 +96,13 @@ function TodoForm({
     </StyledTodoForm>
   );
 }
+
+TodoForm.defaultProps = {
+  error: null,
+  tittle: "Form",
+  name: "",
+  desc: "",
+  isOpen: false
+};
 
 export default TodoForm;

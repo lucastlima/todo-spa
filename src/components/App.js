@@ -1,13 +1,19 @@
-import React, { useState, useEffect, memo } from 'react';
-import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { removeTodo, selectTodo, editTodo } from '../store/actions';
-import Button from './Button';
+import React, { useState, useEffect, memo } from "react";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  removeTodo,
+  selectTodo,
+  editTodo,
+  setDialogBox
+} from "../store/actions";
+import Button from "./Button";
 
-import Todo from './Todo';
-import Modal from './Modal';
-import TodoForm from './TodoForm';
-import Layout from './Layout';
+import Todo from "./Todo";
+import Modal from "./Modal";
+import TodoForm from "./TodoForm";
+import Layout from "./Layout";
+import DialogBox from "./DialogBox";
 
 const StyledApp = styled.div`
   display: flex;
@@ -25,8 +31,9 @@ function WrappedApp() {
   const dispatch = useDispatch();
   const todos = useSelector(({ todos }) => todos.allTodos);
   const selected = useSelector(({ todos }) => todos.selectedTodo);
-  const [todoName, setTodoName] = useState('');
-  const [todoDesc, setTodoDesc] = useState('');
+  const dialogBox = useSelector(({ todos }) => todos.dialogBox);
+  const [todoName, setTodoName] = useState("");
+  const [todoDesc, setTodoDesc] = useState("");
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -38,12 +45,16 @@ function WrappedApp() {
   }, [selected]);
 
   function handleInput(e) {
-    if (e.target.name === 'name') {
+    if (e.target.name === "name") {
       setTodoName(e.target.value);
     } else {
       setTodoDesc(e.target.value);
     }
   }
+
+  const closeDialogBox = () => {
+    dispatch(setDialogBox(null));
+  };
 
   const handleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -58,7 +69,7 @@ function WrappedApp() {
 
   const handleEditTodo = () => {
     if (!todoName) {
-      setError('Name is required.');
+      setError("Name is required.");
       setTimeout(() => {
         setError(null);
       }, 1500);
@@ -102,6 +113,15 @@ function WrappedApp() {
               EDIT
             </Button>
           </TodoForm>
+        </Modal>
+      ) : null}
+      {dialogBox ? (
+        <Modal close={closeDialogBox} open={dialogBox}>
+          <DialogBox
+            title={dialogBox.title}
+            message={dialogBox.message}
+            close={closeDialogBox}
+          ></DialogBox>
         </Modal>
       ) : null}
     </Layout>

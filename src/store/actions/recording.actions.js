@@ -5,27 +5,27 @@ import {
   DELETE_RECORDED_SESSION,
   END_SESSION_REPLAY,
   RESET_APP_STATE
-} from '../actiontypes';
+} from "../actiontypes";
+import { setDialogBox } from "../actions";
 
 export const startRecording = () => (dispatch, getState) => {
   dispatch({ type: START_RECORDING });
-  localStorage.setItem('todo-spa', JSON.stringify(getState()));
+  localStorage.setItem("todo-spa", JSON.stringify(getState()));
 };
 
 export const stopRecording = () => (dispatch, getState) => {
   dispatch({ type: STOP_RECORDING });
-  localStorage.setItem('todo-spa', JSON.stringify(getState()));
+  localStorage.setItem("todo-spa", JSON.stringify(getState()));
 };
 
 export const deleteRecordingSession = () => (dispatch, getState) => {
   dispatch({ type: DELETE_RECORDED_SESSION });
-  localStorage.setItem('todo-spa', JSON.stringify(getState()));
+  localStorage.setItem("todo-spa", JSON.stringify(getState()));
 };
 
 export const playRecordingSession = () => async (dispatch, getState) => {
   dispatch({ type: START_SESSION_REPLAY });
   const session = getState().recording.session;
-  const allTodos = getState().todos.allTodos;
   let counter = 0;
   const runTimeLine = () =>
     new Promise((res, rej) => {
@@ -36,21 +36,17 @@ export const playRecordingSession = () => async (dispatch, getState) => {
 
           const highlightFunc = id => {
             const todo = document.getElementById(`${id}`);
-            todo.classList.add('highlight');
+            todo.classList.add("highlight");
             setTimeout(() => {
-              todo.classList.remove('highlight');
+              todo.classList.remove("highlight");
             }, 1000);
           };
 
           timeline = setInterval(() => {
             if (counter < session.length) {
-              if (session[counter].type === 'UPDATE_TODO') {
-                try {
-                  const id = session[counter].payload.id;
-                  highlightFunc(id);
-                } catch (error) {
-                  clearInterval(timeline);
-                }
+              if (session[counter].type === "UPDATE_TODO") {
+                const id = session[counter].payload.id;
+                highlightFunc(id);
               }
 
               dispatch(session[counter]);
@@ -61,7 +57,12 @@ export const playRecordingSession = () => async (dispatch, getState) => {
             }
           }, 1000);
         } else {
-          alert('No records found! Please record a session first.');
+          dispatch(
+            setDialogBox({
+              title: "Message:",
+              message: "No sessions found. Please record a session first."
+            })
+          );
           res();
         }
       } catch (error) {
@@ -72,5 +73,5 @@ export const playRecordingSession = () => async (dispatch, getState) => {
     });
   await runTimeLine();
   dispatch({ type: END_SESSION_REPLAY });
-  localStorage.setItem('todo-spa', JSON.stringify(getState()));
+  localStorage.setItem("todo-spa", JSON.stringify(getState()));
 };

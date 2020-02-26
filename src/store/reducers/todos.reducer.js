@@ -3,14 +3,15 @@ import {
   REMOVE_TODO,
   SELECT_TODO,
   UPDATE_TODO,
-  START_SESSION_REPLAY,
-  RESET_APP_STATE
-} from '../actiontypes';
+  RESET_APP_STATE,
+  SET_DIALOGBOX
+} from "../actiontypes";
 
 const initialState = {
   allTodos: [],
   selectedTodo: null,
-  prevState: null
+  prevState: null,
+  dialogBox: null
 };
 
 export default (state = initialState, action) => {
@@ -39,6 +40,12 @@ export default (state = initialState, action) => {
         ...state,
         prevState: [...state.allTodos],
         allTodos: []
+      };
+    case SET_DIALOGBOX:
+      return {
+        ...state,
+        // format {title: string, message: string}
+        dialogBox: action.payload
       };
     default:
       return state;
